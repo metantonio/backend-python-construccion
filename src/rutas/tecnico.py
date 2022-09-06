@@ -12,31 +12,36 @@ URL_BACKEND = os.environ.get('BASE_URL')
 @app.route('/tecnico', methods=['POST'])
 def fetching():
     data = request.get_json()
-    if isinstance(data, dict):  
-        if(data["metodo"]=="POST"):
-            f = requests.post(URL_BACKEND+data["endpoint"], json=data["objeto"])    
-            answer = f.json()
-            print("existen "+str(len(answer))+" registros en: "+data["endpoint"])    
-            items = answer   
-            save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
-            completeName = os.path.join(save_path, data["archivo"])
-            with open(completeName, "w") as text_file:
-                json.dump(items, text_file, indent = 6)
+    if isinstance(data, dict):
+        try:  
+            if(data["metodo"]=="POST"):
+                f = requests.post(URL_BACKEND+data["endpoint"], json=data["objeto"])    
+                answer = f.json()
+                print("existen "+str(len(answer))+" registros en: "+data["endpoint"])    
+                items = answer   
+                save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
+                completeName = os.path.join(save_path, data["archivo"])
+                with open(completeName, "w") as text_file:
+                    json.dump(items, text_file, indent = 6)
 
-            return jsonify({"msg":f'Archivo {data["archivo"]} generado'}), 200
-        elif(data["metodo"]=="GET"):
-            f = requests.get(URL_BACKEND+data["endpoint"])
-            answer = f.json()
-            print("existen "+str(len(answer))+" registros en: "+data["endpoint"])    
-            items = answer   
-            save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
-            completeName = os.path.join(save_path, data["archivo"])
-            with open(completeName, "w") as text_file:
-                json.dump(items, text_file, indent = 6)
+                return jsonify({"msg":f'Archivo {data["archivo"]} generado'}), 200
+            elif(data["metodo"]=="GET"):
+                f = requests.get(URL_BACKEND+data["endpoint"])
+                answer = f.json()
+                print("existen "+str(len(answer))+" registros en: "+data["endpoint"])    
+                items = answer   
+                save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
+                completeName = os.path.join(save_path, data["archivo"])
+                with open(completeName, "w") as text_file:
+                    json.dump(items, text_file, indent = 6)
 
-            return jsonify({"msg":f'Archivo {data["archivo"]} generado'}), 200
-        else:
-            return jsonify({"msg":"Método no válido"}), 401
+                return jsonify({"msg":f'Archivo {data["archivo"]} generado'}), 200
+            else:
+                return jsonify({"msg":"Método no válido"}), 401
+
+        except Exception as err:
+            print(err)
+            return jsonify({"message":"internal error por data inválida o incompleta, vuelva a intentar por si los estados no se cargaron correctamente"}), 500
     else:
         return jsonify({"msg":"error en la data"}), 400
 
