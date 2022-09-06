@@ -14,22 +14,29 @@ def fetching():
     data = request.get_json()
     if isinstance(data, dict):  
         if(data["metodo"]=="POST"):
-            f = requests.post(URL_BACKEND+data["endpoint"], json=data["objeto"])
-    
+            f = requests.post(URL_BACKEND+data["endpoint"], json=data["objeto"])    
             answer = f.json()
-            print("existen "+str(len(answer))+" registros en: "+data["endpoint"])
-    
-            items = answer
-
-   
+            print("existen "+str(len(answer))+" registros en: "+data["endpoint"])    
+            items = answer   
             save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
-            completeName = os.path.join(save_path, data["archivo"]) 
-  
-
+            completeName = os.path.join(save_path, data["archivo"])
             with open(completeName, "w") as text_file:
                 json.dump(items, text_file, indent = 6)
 
             return jsonify({"msg":f'Archivo {data["archivo"]} generado'}), 200
+        elif(data["metodo"]=="GET"):
+            f = requests.get(URL_BACKEND+data["endpoint"])
+            answer = f.json()
+            print("existen "+str(len(answer))+" registros en: "+data["endpoint"])    
+            items = answer   
+            save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
+            completeName = os.path.join(save_path, data["archivo"])
+            with open(completeName, "w") as text_file:
+                json.dump(items, text_file, indent = 6)
+
+            return jsonify({"msg":f'Archivo {data["archivo"]} generado'}), 200
+        else:
+            return jsonify({"msg":"Método no válido"}), 401
     else:
         return jsonify({"msg":"error en la data"}), 400
 
