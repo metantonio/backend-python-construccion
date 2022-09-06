@@ -14,7 +14,7 @@ def fetching():
     data = request.get_json()
     if isinstance(data, dict):  
         if(data["metodo"]=="POST"):
-            f = requests.post(URL_BACKEND+data["endpoint"], json={})
+            f = requests.post(URL_BACKEND+data["endpoint"], json={data["objeto"]})
     
             answer = f.json()
             print("existen "+str(len(answer))+" registros en: "+data["endpoint"])
@@ -29,7 +29,7 @@ def fetching():
             with open(completeName, "w") as text_file:
                 json.dump(items, text_file, indent = 6)
 
-            return jsonify({"msg":"Data Grabada Correctamente"}), 200
+            return jsonify({"msg":f'Archivo {data["archivo"]} generado'}), 200
     else:
         return jsonify({"msg":"error en la data"}), 400
 
