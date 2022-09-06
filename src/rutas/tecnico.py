@@ -22,7 +22,7 @@ def fetching():
             items = answer
 
    
-            save_path = '../../BD_Prueba/'   
+            save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
             completeName = os.path.join(save_path, data["archivo"]) 
   
 
