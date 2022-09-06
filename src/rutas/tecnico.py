@@ -14,7 +14,7 @@ def fetching():
     data = request.get_json()
     if isinstance(data, dict):  
         if(data["metodo"]=="POST"):
-            f = requests.post(URL_BACKEND+data["endpoint"], json={data["objeto"]})
+            f = requests.post(URL_BACKEND+data["endpoint"], json=data["objeto"])
     
             answer = f.json()
             print("existen "+str(len(answer))+" registros en: "+data["endpoint"])
