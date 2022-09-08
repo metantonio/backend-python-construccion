@@ -57,18 +57,18 @@ def excel2json():
             if(x != ".DS_Store" and x!="excel2json.py" and x[-3:]=="xls"):
                 print(x[:-3])
                 print(x[-3:])
-                df_excel = pd.read_excel("./"+x,sheet_name="Hoja1")            
+                df_excel = pd.read_excel(SAVE_RESPALDO+"/"+x,sheet_name="Hoja1")            
                 df_excel_columnas = df_excel.columns
-                print("Excel Heads: \n", df_excel_columnas)
-                df_excel.to_json(path_or_buf= x[:-4]+'.json',orient='records')
+                #print("Excel Heads: \n", df_excel_columnas)
+                df_excel.to_json(path_or_buf= SAVE_RESPALDO+"/"+x[:-4]+'.json',orient='records')
         return jsonify({"msg":f'Archivos JSON generados'}), 200
     else:
         return jsonify({"msg":"error en generar archivos .json"}), 400
 
 @app.route('/tecnicoJson2Excel', methods=['POST'])
 def json2excel():
-    lista_de_archivos = os.listdir(SAVE_RESPALDO)
-    #print(lista_de_archivos)
+    lista_de_archivos = os.listdir(str(SAVE_RESPALDO))
+    #print(SAVE_RESPALDO)
     if len(lista_de_archivos) > 0:
         print("vamos a iniciar con " + str(len(lista_de_archivos)) + " Archivos")
         ind=0
@@ -77,13 +77,13 @@ def json2excel():
                 #print(x[:-4])
                 #print(x[-4:])
                 print(x)
-                print(ind)
-                print(x[:-4]+'json')
-                with open(x[:-4]+'json') as json_file:
+                #print(ind)
+                #print(x[:-4]+'json')
+                with open(SAVE_RESPALDO+"/"+x[:-4]+'json') as json_file:
                     data = json.load(json_file)
                     df = pd.DataFrame(data)
                     #df.to_excel("./"+x[:-4]+"xlsx") #funciona pero no tengo controlo sobre nombre hoja o reescritura
-                    with pd.ExcelWriter(x[:-4]+"xlsx", mode='w') as writer:
+                    with pd.ExcelWriter(SAVE_RESPALDO+"/"+x[:-4]+"xlsx", mode='w') as writer:
                         df.to_excel(writer, sheet_name="Hoja1")
             ind=ind+1
         return jsonify({"msg":f'Archivos EXCEL generados'}), 200
