@@ -61,8 +61,9 @@ def excel2json():
                 df_excel_columnas = df_excel.columns
                 print("Excel Heads: \n", df_excel_columnas)
                 df_excel.to_json(path_or_buf= x[:-4]+'.json',orient='records')
-        else:
-            print("terminado")
+        return jsonify({"msg":f'Archivos JSON generados'}), 200
+    else:
+        return jsonify({"msg":"error en generar archivos .json"}), 400
 
 @app.route('/tecnicoJson2Excel;', methods=['POST'])
 def json2excel():
@@ -79,6 +80,7 @@ def json2excel():
                     #df.to_excel("./"+x[:-4]+"xlsx") #funciona pero no tengo controlo sobre nombre hoja o reescritura
                     with pd.ExcelWriter(x[:-4]+"xlsx", mode='w') as writer:
                         df.to_excel(writer, sheet_name="Hoja1")
+        return jsonify({"msg":f'Archivos EXCEL generados'}), 200
 
-        else:
-            print("terminado")
+    else:
+        return jsonify({"msg":"error en generar archivos .xls"}), 400
