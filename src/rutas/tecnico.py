@@ -65,7 +65,7 @@ def excel2json():
     else:
         return jsonify({"msg":"error en generar archivos .json"}), 400
 
-@app.route('/tecnicoJson2Excel;', methods=['POST'])
+@app.route('/tecnicoJson2Excel', methods=['POST'])
 def json2excel():
     lista_de_archivos = SAVE_RESPALDO
     if len(lista_de_archivos) > 0:
