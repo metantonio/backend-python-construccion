@@ -48,4 +48,37 @@ def fetching():
     else:
         return jsonify({"msg":"error en la data"}), 400
 
- 
+@app.route('/tecnicoExcel2Json', methods=['POST'])
+def excel2json():
+    lista_de_archivos = SAVE_RESPALDO
+    if len(lista_de_archivos) > 0:
+        print("vamos a iniciar son " + str(len(lista_de_archivos)) + " Archivos")
+        for x in lista_de_archivos:        
+            if(x != ".DS_Store" and x!="excel2json.py" and x[-3:]=="xls"):
+                print(x[:-3])
+                print(x[-3:])
+                df_excel = pd.read_excel("./"+x,sheet_name="Hoja1")            
+                df_excel_columnas = df_excel.columns
+                print("Excel Heads: \n", df_excel_columnas)
+                df_excel.to_json(path_or_buf= x[:-4]+'.json',orient='records')
+        else:
+            print("terminado")
+
+@app.route('/tecnicoJson2Excel;', methods=['POST'])
+def json2excel():
+    lista_de_archivos = SAVE_RESPALDO
+    if len(lista_de_archivos) > 0:
+        print("vamos a iniciar son " + str(len(lista_de_archivos)) + " Archivos")
+        for x in lista_de_archivos:        
+            if(x != ".DS_Store" and x!="excel2json.py" and x!="Tablas.json" and x[-4:]=="json"):
+                print(x[:-4])
+                print(x[-4:])
+                with open(x[:-4]+'json') as json_file:
+                    data = json.load(json_file)
+                    df = pd.DataFrame(data)
+                    #df.to_excel("./"+x[:-4]+"xlsx") #funciona pero no tengo controlo sobre nombre hoja o reescritura
+                    with pd.ExcelWriter(x[:-4]+"xlsx", mode='w') as writer:
+                        df.to_excel(writer, sheet_name="Hoja1")
+
+        else:
+            print("terminado")

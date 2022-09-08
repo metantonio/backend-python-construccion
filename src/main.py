@@ -22,7 +22,7 @@ MIGRATE = Migrate(app, db)
 db.init_app(app)
 CORS(app)
 setup_admin(app)
-from src.rutas import enviarcorreo, fetching #Aquí importamos las rutas registradas en el __init__.py de la carpeta rutas
+from src.rutas import enviarcorreo, fetching, excel2json, json2excel #Aquí importamos las rutas registradas en el __init__.py de la carpeta rutas
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
