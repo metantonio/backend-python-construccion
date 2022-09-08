@@ -8,6 +8,7 @@ import pandas as pd
 import openpyxl 
 
 URL_BACKEND = os.environ.get('BASE_URL')
+SAVE_RESPALDO = os.environ.get('RESPALDO')
 
 @app.route('/tecnico', methods=['POST'])
 def fetching():
@@ -19,7 +20,8 @@ def fetching():
                 answer = f.json()
                 print("existen "+str(len(answer))+" registros en: "+data["endpoint"])    
                 items = answer   
-                save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
+                #save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
+                save_path = SAVE_RESPALDO
                 completeName = os.path.join(save_path, data["archivo"])
                 with open(completeName, "w") as text_file:
                     json.dump(items, text_file, indent = 6)
@@ -30,7 +32,8 @@ def fetching():
                 answer = f.json()
                 print("existen "+str(len(answer))+" registros en: "+data["endpoint"])    
                 items = answer   
-                save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto   
+                save_path = './respaldo' #donde la ruta relativa es en relación a la raíz del proyecto
+                save_path = SAVE_RESPALDO   
                 completeName = os.path.join(save_path, data["archivo"])
                 with open(completeName, "w") as text_file:
                     json.dump(items, text_file, indent = 6)
